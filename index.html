@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Keylogger App</title>
+    <script>
+        let logs = [];
+
+        // Capture all keypresses
+        document.addEventListener('keydown', function(e) {
+            logs.push(`Pressed: ${e.key} at ${new Date().toLocaleString()}`);
+            console.log(logs);
+        });
+
+        // Capture all text input changes
+        document.addEventListener('input', function(e) {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                logs.push(`Typed in ${e.target.tagName}: ${e.target.value} at ${new Date().toLocaleString()}`);
+                console.log(logs);
+            }
+        });
+
+        // Save logs to local storage every 10 seconds
+        setInterval(() => {
+            localStorage.setItem('keylogger-logs', JSON.stringify(logs));
+            console.log('Logs saved to local storage');
+        }, 10000);
+
+        // Load existing logs on page load
+        window.onload = function() {
+            const storedLogs = localStorage.getItem('keylogger-logs');
+            if (storedLogs) {
+                logs = JSON.parse(storedLogs);
+                console.log('Loaded existing logs');
+            }
+        };
+    </script>
+</head>
+<body>
+    <h1>Keylogger App</h1>
+    <textarea placeholder="Type something here" rows="10" cols="30"></textarea>
+    <input type="text" placeholder="Or type here">
+    <button onclick="console.log(logs)">View Logs</button>
+</body>
+</html>
